@@ -1,0 +1,63 @@
+<html>
+
+<head>
+  <title>Bộ khởi động xe</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+
+<body>
+  <!-- create a wellcome page and login page -->
+  <div class="container center">
+    <h1>Thiết bị khởi động xe thông minh </h1>
+    <div class=" center" id="login_section">
+      <p>Đăng nhập để sử dụng dịch vụ</p>
+      <form action="/login">
+        <input type="text" name="un" placeholder="Tên đăng nhập" required>
+        <input type="password" name="pw" placeholder="Mật khẩu" required>
+        <br>
+        <button type="submit" id="login_btn">Đăng nhập</button>
+      </form>
+    </div>
+    <div class="center d-none hidden" id="main_section">
+      <h1>Chào mừng bạn đã quay trở lại, Admin</h1>
+      <p>Điềm mã và nhấn mở khóa</p>
+      <input type="text" name="passcode" placeholder="Mã mở khóa" required>
+      <br>
+      <button id="unlock_btn">UNLOCK</button>
+      <p id="noti" style="display: none;">Đã gửi yêu cầu mở. Hãy kiểm tra thiết bị</p>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      document.querySelector("#login_btn").addEventListener('click', (e) => {
+        e.preventDefault();
+        const username = document.querySelector('input[name="un"]').value;
+        const password = document.querySelector('input[name="pw"]').value;
+        if (username === 'admin' && password === 'admin') {
+          let main = document.querySelector("#main_section");
+          let login = document.querySelector("#login_section");
+          main.classList.remove('d-none', 'hidden');
+          login.classList.add('d-none', 'hidden');
+        } else {
+          alert('Sai tên đăng nhập hoặc mật khẩu');
+        }
+      });
+
+      document.querySelector('#unlock_btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (document.querySelector('input[name="passcode"]').value === '1234') {
+          socket.emit('/unlock', "hello");
+          document.querySelector('p#noti').style.display = 'block';
+        } else {
+          alert('Sai mã mở khóa');
+        }
+
+      });
+    </script>
+  </div>
+
+</body>
+
+</html>

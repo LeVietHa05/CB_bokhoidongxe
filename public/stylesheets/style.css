@@ -1,0 +1,93 @@
+/* nen trang web se la mau cam nhat, container se o giua man hinh, nut dang nhap mau xanh */
+/* Path: public/stylesheets/style.css */
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #8ecae6, #ffb703);
+  /* font chu se la roboto */
+  font-family: "Roboto", sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scale: 2.5;
+  overflow: hidden;
+}
+
+a {
+  color: #219ebc;
+}
+
+h1 {
+  font-size: 2em;
+}
+/* container se co mau nen la xanh duong, va co border radius , ngoai ra thi container se dung chinh giua man hinh*/
+.container {
+  width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffb703;
+  border-radius: 10px;
+  backdrop-filter: blur(10px); /* Apply the blur */
+  /* height: 50%; */
+}
+
+button {
+  background-color: #023047;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 40%;
+  border-radius: 15px;
+}
+
+/* .center se lam chu hien thi o giua */
+.center {
+  text-align: center;
+}
+
+/*make the input look better  */
+input {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 15px;
+}
+
+.mt-100 {
+  margin-top: 100px;
+}
+
+.d-none {
+  /* display: none; */
+  opacity: 0;
+}
+.d-block {
+  /* display: block; */
+  opacity: 1;
+}
+#main_section {
+  /* transform: translateX(100%); */
+  transition: all ease-in-out 1s;
+}
+
+#login_section {
+  transition: all ease-in-out 1s;
+}
+.move-left {
+  transform: translateX(100%);
+  display: none;
+}
+.move-right {
+  transform: translateX(-100%);
+}
+
+.hidden {
+  height: 0;
+  overflow: hidden;
+}

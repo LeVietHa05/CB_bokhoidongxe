@@ -1,0 +1,29 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bộ khởi động xe</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+    <div class="container center">
+        <h1>Chào mừng bạn đã quay trở lại</h1>
+        <p>Đây là trang quản trị</p>
+        <p>Bấm vào nút phía dưới để mở khóa</p>
+        <button>UNLOCK</button>
+        <p id="noti" style="display: none;">Đã gửi yêu cầu mở. Hãy kiểm tra thiết bị</p>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        document.querySelector('button').addEventListener('click', () => {
+            socket.emit('/unlock', "hello");
+            document.querySelector('p#noti').style.display = 'block';
+
+        });
+    </script>
+</body>
+
+</html>
