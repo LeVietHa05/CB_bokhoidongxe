@@ -3,7 +3,7 @@
 <head>
   <title>Bộ khởi động xe</title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -26,6 +26,25 @@
       <br>
       <button id="unlock_btn">UNLOCK</button>
       <p id="noti" style="display: none;">Đã gửi yêu cầu mở. Hãy kiểm tra thiết bị</p>
+      <div>
+        <div>
+          <canvas id="tempChart"></canvas>
+        </div>
+        <div>
+          <canvas id="humiCHart"></canvas>
+        </div>
+        <div>
+          <canvas id="dustChart"></canvas>
+        </div>
+        <div>
+          <canvas id="CO2Chart"></canvas>
+        </div>
+        <div>
+          <canvas id="SO2Chart"></canvas>
+        </div>
+
+      </div>
+
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -55,6 +74,144 @@
         }
 
       });
+    </script>
+    <script>
+
+      function chartConfigGen(label, data, color) {
+        return {
+          type: 'line',
+          data: {
+            labels: data.map(d => {
+              // let date = new Date(d.time);
+              // return `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+              return d.time
+            }),
+            datasets: [{
+              label: label.name,
+              data: data.map(d => d[label.id]),
+              borderColor: color,
+              tension: 0.1,
+            }],
+            options: {
+              responsive: true,
+            }
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        }
+      }
+
+      let labels = [{
+        name: "Nhiệt độ",
+        id: "temp",
+        range1: 3,
+        range2: 30
+      }, {
+        name: "Độ ẩm",
+        id: "humi",
+        range1: 4,
+        range2: 70
+      }, {
+        name: "Bụi",
+        id: "dust",
+        range1: 5,
+        range2: 10
+      }, {
+        name: "CO2",
+        id: "co2",
+        range1: 2,
+        range2: 50
+      }, {
+        name: "SO2",
+        id: "so2",
+        range1: 4,
+        range2: 20
+      }]
+      let charts = [];
+      let chartConfigs = [];
+      let chartIDs = [tempChart, humiCHart, dustChart, CO2Chart, SO2Chart]
+      let data = {
+        temp: [{
+          temp: 30,
+          time: new Date().toLocaleTimeString('VI')
+        }],
+        humi: [{
+          humi: 70,
+          time: new Date().toLocaleTimeString('VI')
+        }],
+        dust: [{
+          dust: 10,
+          time: new Date().toLocaleTimeString('VI')
+        }],
+        co2: [{
+          co2: 50,
+          time: new Date().toLocaleTimeString('VI')
+        }],
+        so2: [{
+          so2: 20,
+          time: new Date().toLocaleTimeString('VI')
+        }]
+      }
+      let color = ['red', 'blue', 'green', 'purple', 'brown', 'orange']
+
+      for (let i = 0; i < labels.length; i++) {
+        genFakeData(labels[i].id, 1, labels[i].range1, labels[i].range2);
+        chartConfigs = chartConfigGen(labels[i], data[labels[i].id], color[i]);
+        charts[i] = new Chart(chartIDs[i], chartConfigs);
+      }
+
+      function addNewData(chart, label, data) {
+        chart.data.labels.push(label);
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.push(data);
+        });
+        chart.update();
+      }
+
+      function removeChartData(chart) {
+        if (!(chart.data.labels.length > 10)) {
+          console.log('no need to remove')
+          return;
+        }
+        console.log(chart.data.labels.length)
+
+        chart.data.labels.shift();
+        chart.data.datasets.forEach((dataset) => {
+          dataset.data.shift();
+        });
+        chart.update();
+      }
+
+      function genFakeData(type, number = 1, range1, range2) {
+        for (let i = 0; i < number; i++) {
+          let obj = {
+            [type]: Math.floor(Math.random() * range1) + range2,
+            time: new Date().toLocaleTimeString('VI')
+          }
+          console.log(obj)
+          data[type].push(obj)
+          if (charts[labels.findIndex(label => label.id === type)] === undefined) {
+            return;
+          }
+          addNewData(
+            charts[labels.findIndex(label => label.id === type)],
+            data[type][data[type].length - 1].time,
+            +data[type][data[type].length - 1][type] // convert to number
+          )
+          removeChartData(charts[labels.findIndex(label => label.id === type)])
+        }
+      }
+    </script>
+    <script>
+      setInterval(() => {
+        genFakeData('temp', 1, 3, 30);
+        genFakeData('humi', 1, 4, 70);
+        genFakeData('dust', 1, 5, 10);
+        genFakeData('co2', 1, 2, 50);
+        genFakeData('so2', 1, 4, 20);
+      }, 10000)
     </script>
   </div>
 
