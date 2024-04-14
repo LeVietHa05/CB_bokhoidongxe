@@ -23,7 +23,7 @@ h1 {
 }
 /* container se co mau nen la xanh duong, va co border radius , ngoai ra thi container se dung chinh giua man hinh*/
 .container {
-  width: 800px;
+  width: 1200px;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffb703;
